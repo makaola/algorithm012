@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<vector<int>> r;
+    void build(int n, int k, vector<int> &tr){
+        if(tr.size() == k){  //够了就不用再走了
+            r.push_back(tr);
+            return;
+        }   
+        if(n < k - tr.size()) return; //满足不了也不用再走了
+
+        build(n-1, k, tr); //不加这个数
+        
+        tr.push_back(n);  //加这个数
+        build(n-1, k, tr);
+        tr.pop_back();
+    }
+
+    vector<vector<int>> combine(int n, int k) {
+        if(n < k) return r;
+        vector<int> tr;
+        build(n, k, tr);
+        return r;
+    }
+};
