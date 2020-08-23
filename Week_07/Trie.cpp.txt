@@ -1,0 +1,59 @@
+class Trie {
+
+    struct TrieNode{
+        map<char, TrieNode*> ct;
+        int end;
+        TrieNode():end(0){};
+    };
+
+    TrieNode* _root;
+    bool find(string s, int exact_match) {
+        TrieNode *curr = _root;
+        for (int i = 0; i < s.size(); i++) {
+            if (curr->ct.find(s[i]) == curr->ct.end())
+                return false;
+            else
+                curr = curr->ct[s[i]];
+        }
+        
+        if (exact_match)
+            return (curr->end) ? true : false;
+        else
+            return true;
+    }
+
+public:
+    /** Initialize your data structure here. */
+    Trie() {
+        _root = new TrieNode();
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        TrieNode *cur = _root;
+        for(int i=0; i<word.size(); i++){
+            if(cur->ct.find(word[i]) == cur->ct.end())
+                cur->ct[word[i]] = new TrieNode();
+            cur = cur->ct[word[i]];
+        }
+        cur->end = 1;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        return find(word, 1);
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        return find(prefix, 0);
+    }
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie* obj = new Trie();
+ * obj->insert(word);
+ * bool param_2 = obj->search(word);
+ * bool param_3 = obj->startsWith(prefix);
+ */

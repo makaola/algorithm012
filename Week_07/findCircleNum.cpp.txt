@@ -1,0 +1,43 @@
+class Solution {
+
+    int _parent(vector<int> &parent, int p){
+        while(p!=parent[p]){
+            parent[p] = parent[parent[p]];
+            p = parent[p];
+        }
+        return p;
+    }
+
+    void _union(vector<int> &parent, int p, int q){
+        int pp = _parent(parent, p);
+        int pq = _parent(parent, q);
+        if(pp == pq) return;
+        parent[pq] = pp;
+    }
+
+public:
+
+    int findCircleNum(vector<vector<int>>& M) {
+        if(M.empty()) return 0;
+        int num = M.size();
+        vector<int> parent(num);
+        for(int i=0; i<num; i++){
+            parent[i] = i;
+        }
+
+        for(int i=0; i<num; i++){
+            for(int j=i+1; j<num; j++){
+                if(M[i][j] == 1){
+                    _union(parent, i, j);
+                }
+            }
+        }
+
+        set<int> s;
+        for(int i=0; i<num; i++){
+            s.insert(_parent(parent, i));
+        }
+
+        return s.size();
+    }
+};
